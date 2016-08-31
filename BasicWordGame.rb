@@ -11,8 +11,7 @@ class WordGame
   (e.g., score for hello is length (5) + frequency (2, for l))
 =end
   def word_score(word)
-    count_letters(word)
-    return 7
+    return count_letters(word) + word.length
   end
 
 =begin
@@ -25,9 +24,11 @@ class WordGame
   - I used each_char to iterate over the word. This is not available in Ruby 1.8.x. 
 =end
   def count_letters(word)
+    freq ||= []
     word.split("").each do |i|
-      puts(word.count i)
+      freq.push(word.count(i))
     end
+  return freq.max
   end
 
 =begin
