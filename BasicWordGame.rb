@@ -11,7 +11,7 @@ class WordGame
   (e.g., score for hello is length (5) + frequency (2, for l))
 =end
   def word_score(word)
-    return count_letters(word) + word.length
+    return count_letters(word) + word.length()
   end
 
 =begin
@@ -28,7 +28,7 @@ class WordGame
     word.split("").each do |i|
       freq.push(word.count(i))
     end
-  return freq.max
+  return freq.max()
   end
 
 =begin
@@ -103,7 +103,7 @@ Hint:
 - you can pass parameters to methods that contain a yield (not shown in slide)
 =end  
   def display_quartiles(scores)
-
+    puts("Quartiles total: " + scores)
   end
 
 end
@@ -118,9 +118,9 @@ puts "Showing a couple of word scores"
 puts "Score for hello is: #{game.word_score("hello")} (should be 7)"
 puts "Score for banana is:  #{game.word_score("banana")} (should be 9)"
 puts "\nShowing the leader board, various options" 
-scores = game.create_scores
+scores = game.create_scores()
 puts "\nShowing the quartiles"
-game.display_quartiles scores
+game.display_quartiles(scores)
 puts "\nUnit tests follow..."
 
 =begin
