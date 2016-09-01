@@ -75,7 +75,17 @@ class WordGame
 =end
 
   def create_scores
-
+    i = 0
+    num = 8
+    top_score = 100
+    
+    scores ||= []
+    while i < num do
+      scores.push(top_score)
+      top_score -= 10
+      i +=1
+    end
+  return scores 
   end
 
 =begin
@@ -103,7 +113,7 @@ Hint:
 - you can pass parameters to methods that contain a yield (not shown in slide)
 =end  
   def display_quartiles(scores)
-    puts("Quartiles total: " + scores)
+    puts("Quartiles total: " + scores.to_s())
   end
 
 end
