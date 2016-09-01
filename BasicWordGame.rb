@@ -11,7 +11,7 @@ class WordGame
   (e.g., score for hello is length (5) + frequency (2, for l))
 =end
   def word_score(word)
-    return count_letters(word) + word.length
+    return count_letters(word) + word.length()
   end
 
 =begin
