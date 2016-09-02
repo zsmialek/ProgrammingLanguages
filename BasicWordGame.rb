@@ -46,7 +46,12 @@ class WordGame
 =end
 
   def leader_board(scores)
-   
+    first_score, second_score, thrid_score, *rest_scores = scores
+    rank = if scores.length() == 1 then "first"
+           elsif scores.length() == 2 then "second"
+           else "third"
+     end
+    display_score(scores, rank)
   end
 
 =begin
@@ -56,7 +61,12 @@ class WordGame
   - use string interpolation
 =end
   def display_score score, rank
-
+    no_score_msg = "There is no " 
+    score_str = if score.length() == 1 then "Lone Wolf"
+                else "Top Dog"
+    end
+    puts("We have a #{score_str}")
+    puts(rank)
   end
 
 =begin
@@ -75,15 +85,19 @@ class WordGame
 =end
 
   def create_scores
-    i = 0
-    num = 8
+    $i = 0
+    $num = 7
     top_score = 100
-    
+    max_length = 6
     scores ||= []
-    while i < num do
+
+     until $i > $num do 
       scores.push(top_score)
+      if scores.length < max_length
+        leader_board(scores)
+      end
       top_score -= 10
-      i +=1
+      $i +=1
     end
   return scores 
   end
@@ -102,7 +116,14 @@ class WordGame
   - other bookkeeping (e.g., setting totals to 0, etc.) can be coded however you see fit.
 =end
   def get_quartiles(scores)
- 
+
+    quartiles ||= []
+    start = 0
+    max = 3
+    (start..max).each do |i|
+      quartiles.push(scores.at(2*i) + scores.at(2*i+1))
+    end
+  return quartiles
   end
 
 =begin
@@ -113,9 +134,13 @@ Hint:
 - you can pass parameters to methods that contain a yield (not shown in slide)
 =end  
   def display_quartiles(scores)
-    puts("Quartiles total: " + scores.to_s())
-  end
 
+    quartiles = get_quartiles(scores)
+    
+    for quart in quartiles
+      yield quart if block_given?
+    end
+  end
 end
 
 =begin
@@ -123,6 +148,7 @@ This is a scripting language, so we do not require a "main" per se.
 The following lines of code will get executed when this script runs. 
 You should not modify these lines.
 =end
+
 game = WordGame.new
 puts "Showing a couple of word scores"
 puts "Score for hello is: #{game.word_score("hello")} (should be 7)"
@@ -131,6 +157,7 @@ puts "\nShowing the leader board, various options"
 scores = game.create_scores()
 puts "\nShowing the quartiles"
 game.display_quartiles(scores)
+game.display_quartiles(scores) {|i| puts "Quartiles total: #{i}"}
 puts "\nUnit tests follow..."
 
 =begin
