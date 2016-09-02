@@ -24,8 +24,10 @@ class WordGame
   - I used each_char to iterate over the word. This is not available in Ruby 1.8.x. 
 =end
   def count_letters(word)
+    table = Hash.new
     freq ||= []
     word.split("").each do |i|
+      table[i] = word.count(i)
       freq.push(word.count(i))
     end
   return freq.max()
@@ -72,7 +74,7 @@ class WordGame
     if score.length() == 1 then puts("There is no second score #{"\n"}", 
                                       "There is no third score")
     elsif score.length() == 2 then puts("The #{rank.at(1)} score is #{second_score} #{"\n"}",
-                                        "There is not third score")
+                                        "There is no third score")
     else puts("The #{rank.at(1)} score is #{second_score} #{"\n"}",
               "The #{rank.at(2)} score is #{thrid_score}")
     end
@@ -181,3 +183,18 @@ puts "\nUnit tests follow..."
 Add a unit test to test the two word scores displayed above (hello and banana)
 and at least 3 others.
 =end
+class WordGameTest < MiniTest::Test
+  @@EPSILON = 0.0001
+  def test_word_score
+    word_game = WordGame.new
+    assert_in_delta(7, word_game.word_score("hello"),@@EPSILON)
+    assert_in_delta(9, word_game.word_score("banana"),@@EPSILON)
+    assert_in_delta(4, word_game.word_score("the"),@@EPSILON)
+  end
+
+  def test_count_letter
+    word_game = WordGame.new
+    assert_in_delta(2, word_game.count_letters("hello"),@@EPSILON)
+    assert_in_delta(3, word_game.count_letters("aaa"),@@EPSILON)
+  end
+end
