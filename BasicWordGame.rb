@@ -47,9 +47,9 @@ class WordGame
 
   def leader_board(scores)
     first_score, second_score, thrid_score, *rest_scores = scores
-    rank = if scores.length() == 1 then "first"
-           elsif scores.length() == 2 then "second"
-           else "third"
+    rank = if scores.length() == 1 then ["first"]
+           elsif scores.length() == 2 then ["first", "second"]
+           else ["first", "second", "third"]
      end
     display_score(scores, rank)
   end
@@ -61,12 +61,29 @@ class WordGame
   - use string interpolation
 =end
   def display_score score, rank
-    no_score_msg = "There is no " 
+
+    first_score, second_score, thrid_score, *rest_scores = score
     score_str = if score.length() == 1 then "Lone Wolf"
                 else "Top Dog"
     end
+    
     puts("We have a #{score_str}")
-    puts(rank)
+    puts("The #{rank.at(0)} score is #{first_score}")
+    if score.length() == 1 then puts("There is no second score #{"\n"}", 
+                                      "There is no third score")
+    elsif score.length() == 2 then puts("The #{rank.at(1)} score is #{second_score} #{"\n"}",
+                                        "There is not third score")
+    else puts("The #{rank.at(1)} score is #{second_score} #{"\n"}",
+              "The #{rank.at(2)} score is #{thrid_score}")
+    end
+    
+    if rest_scores.length() == 1 then puts("The total of remaining score is #{rest_scores.at(0)}")
+
+    elsif rest_scores.length() == 2 then puts("The total of remaining score is #{rest_scores.at(0) + rest_scores.at(1)}") 
+    end
+ 
+    puts("Congratulations to #{score_str}")
+    puts("\n")
   end
 
 =begin
