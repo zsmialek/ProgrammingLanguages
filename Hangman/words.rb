@@ -7,7 +7,7 @@ class Words
 
   def select_word()
     word = @word_list.sample()
-    puts(word)
+    #puts(word)
     return word
   end
 
@@ -18,15 +18,14 @@ class Words
 
       File.open(filename, "r") do |f|
 
-        f.each_line do |line|
+        f.each_line() do |line|
           
           if line.count(" ") > 0
             line.split(" ").each() do |word| 
               @word_list.push(word)
-              #puts(word)
             end
           else
-            @word_list.push(line)
+            @word_list.push(line.chomp)
           end
 
         end#end of each_line
