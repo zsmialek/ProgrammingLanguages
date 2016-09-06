@@ -5,6 +5,7 @@ class Hangman
 
   def initialize()
     @welcome_message = "Let's play hangman"
+    @init_board = ""
     puts(@welcome_message)
   end
 
@@ -19,20 +20,20 @@ class Hangman
 
 
   def game_loop(word)
-    puts("game loop word")
-    puts(word)
-    letter_guess = user_input() 
+    
+    letter_guess = user_input()
+    index = check_guess(letter_guess, word)
+    puts("Index #{index}")
   end
+
 
   def display_board(word)
      
-     init_board = ""
      word.split("").each do |i| 
-      init_board = init_board + "_ "
-      puts(init_board)
+      @init_board = @init_board + "_ "
     end
-    puts(word)
-    #puts(init_board)
+    puts(@init_board)
+
   end
 
   def update_board(guess, word)
@@ -40,14 +41,19 @@ class Hangman
   end
 
   def check_guess(guess, word)
-
-    
+    if word.index(guess).nil? 
+      return word.index(guess)
+    else 
+      return nil
+    end
   end
 
   def user_input()
-    puts("Please enter a letter to guess or 0 to guess word")
-    letter = gets
-    puts(letter)
+    message = "Enter your next letter or '0' to guess the answer:"
+    puts(message.chomp())
+    user_guess = $stdin.gets.chomp()
+    puts("Letter entered #{user_guess}")
+    return user_guess
   end
 
 
