@@ -15,6 +15,9 @@ class Hangman
   end
 
   def display_board(word)
+    word.each() do |i|
+      puts("_")
+    end
   end
 
   def check_guess(word)
@@ -36,4 +39,4 @@ end
 find = game.check_user_input(filename)
 word.read_file(filename)
 guess = word.select_word()
-puts(guess)
+#game.display_board(guess)
