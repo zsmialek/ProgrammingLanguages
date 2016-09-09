@@ -2,9 +2,10 @@ require './words'
 
 class Scramble < Words
 
-  def initialize(scrambled)
-    puts("in init")
+  def initialize(scrambled, correct)
+    puts("Scrambled: #{scrambled} Correct: #{correct}")
     @scrambled_word = scrambled
+    @correct_word = correct
     welcome()
     scramble_game(scrambled)    
   end
@@ -32,6 +33,8 @@ end
 
 word = Words.new
 word_list = word.read_file("other_words.txt")
-scrambled = word.scramble_da_eggs()
-x = Scramble.new(scrambled)
+word_pair = word.scramble_da_eggs()
+scrambled = word_pair[0]
+correct = word_pair[1]
+x = Scramble.new(scrambled, correct)
 

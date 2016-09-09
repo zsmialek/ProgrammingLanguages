@@ -6,10 +6,11 @@ class Words
 
 
   def scramble_da_eggs()
-
-    scrambled, correct = @word_list[rand(@word_list.length())]
+    index = rand(@word_list.length())
+    scrambled = @word_list[index]
+    correct = @word_list[index]
     scrambled = scrambled.split(//).sort_by{rand}.join
-    
+    puts(correct)
     return scrambled, correct
   end
 
