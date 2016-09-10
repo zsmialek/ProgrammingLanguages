@@ -10,7 +10,7 @@ class Words
     scrambled = @word_list[index]
     correct = @word_list[index]
     scrambled = scrambled.split(//).sort_by{rand}.join
-    puts(correct)
+    #puts(correct)
     return scrambled, correct
   end
 

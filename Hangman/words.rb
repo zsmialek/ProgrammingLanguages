@@ -13,7 +13,7 @@ class Words
 
 
   def read_file(filename)
-
+    
     if File.exist?(filename)
 
       File.open(filename, "r") do |f|
@@ -33,5 +33,6 @@ class Words
       end#end of open file
 
     end#end of if
+    return @word_list
   end
 end
