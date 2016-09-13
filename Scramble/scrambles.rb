@@ -1,6 +1,6 @@
 require './words'
 
-class Scramble < Words
+class Scramble
 
 
   def initialize(scrambled, correct, word_list,word_obj)
