@@ -7,21 +7,28 @@ class EmailLogMain
 
     @File_name = file_name
     @words = Array.new
-    @message_id = ""
-    @timestamp = ""
-    @from_address = ""
-    @to_address = ""
+    @message_id = Array.new
+    @timestamp = Array.new
+    @from_address = Array.new
+    @to_address = Array.new
+
   end
 
 
-  def output
-    
+  def write_log()
+    file_name = "parsed_email.txt"
+    File.open(file_name, "w+") do |f|
+      puts(f)
   end
 
 
-  def extract_data(email_data)
-    
+  def extract_data(email_info)
+    get_message_id(email_info)
+    get_date_and_time(email_info)
+    get_from_address(email_info)
+    get_to_address(email_info) 
 
+    write_log()
   end
 
 
@@ -33,6 +40,8 @@ class EmailLogMain
 
   def get_date_and_time(email_info) #The date/time
 #\A.{0,15}
+    TIMESTAMP_REGEX =~ /A.{0,15}/
+     
 
   end
 
@@ -48,8 +57,12 @@ class EmailLogMain
   end
 
 
-  def get_to_address #The to address(es)
+  def get_to_address(email_info) #The to address(es)
 #(?<=from=<).+(?=>,) (NOt sure rubular is down)
+    #regex_to = /?<=to=</
+    email_info.each() do |key, email_data|
+      puts(email_data)
+    end
   end
 
 
@@ -59,8 +72,8 @@ class EmailLogMain
   end
 
 
-  def getMessageNumber(str)
-    str =~ /(?<=: )[A-Z0-9]+(?=:)/
+  def get_message_number(email_info)
+    email_info =~ /(?<=: )[A-Z0-9]+(?=:)/
     var = $~.to_s
 #puts var
   end
@@ -76,7 +89,7 @@ class EmailLogMain
     aFile.close
 
     @words.each{|block| 
-    msgNumber = getMessageNumber(block)
+    msgNumber = get_message_number(block)
 
     if theHash.key?(msgNumber)
       emailStore = theHash[msgNumber]
@@ -100,7 +113,7 @@ end
 e = EmailLogMain.new
 hash = Hash.new
 hash = e.makeHash
-
-hash.each{ |key,value| 
-puts "The HASH VALUE FOR #{key} IS #{value} @@@@@@@@@@@@@@@@@"}
+e.extract_data(hash)
+#hash.each{ |key,value| 
+#puts "The HASH VALUE FOR #{key} IS #{value} @@@@@@@@@@@@@@@@@"}
 
