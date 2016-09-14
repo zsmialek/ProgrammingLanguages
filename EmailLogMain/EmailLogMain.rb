@@ -11,7 +11,13 @@ class EmailLogMain
     @timestamp = Array.new
     @from_address = Array.new
     @to_address = Array.new
-
+    @size = Hash.new
+    @SIZE_REGEX = /(?<=size=)\S.+(?=,)/
+    @TIMESTAMP_REGEX = /^[A-Z][a-z]{2}\W\d+\W([0-9]+):([0-5][0-9]):([0-5][0-9])/
+    @MESSAGE_ID_REGEX = /(?<=: )[A-Z0-9]+(?=:)/
+    @FROM_REGEX = //
+    @TO_REGEX = //
+ 
   end
 
 
@@ -19,34 +25,45 @@ class EmailLogMain
     file_name = "parsed_email.txt"
     File.open(file_name, "w+") do |f|
       puts(f)
+    end
   end
 
 
   def extract_data(email_info)
-    get_message_id(email_info)
-    get_date_and_time(email_info)
-    get_from_address(email_info)
-    get_to_address(email_info) 
+    email_info.each do |key, email_data|
 
-    write_log()
+      get_message_id(email_info)
+      get_date_and_time(email_data)
+      #get_message_size(email_data)
+      #get_from_address(email_info)
+      #get_to_address(email_info)
+    end
+    #write_log()
   end
 
 
   def get_message_id(email_info) #The message id (?<=id=<).+(?=>)
-    
-
+    email_info =~ @MESSAGE_ID_REGEX
+    #puts($~.to_s)
   end
 
 
-  def get_date_and_time(email_info) #The date/time
-#\A.{0,15}
-    TIMESTAMP_REGEX =~ /A.{0,15}/
-     
-
+  def get_date_and_time(email_info) #The date/time \A.{0,15}
+    #puts(email_info)
+    #email_info.each do |key, email_data|
+    email_info =~ @TIMESTAMP_REGEX
+    #puts($~.to_s)
+    @timestamp.push($~.to_s())  
+    #end
+   #puts(@timestamp.size)
   end
 
-  def get_message_size(email_info) #The message size
-#(?<=size=)\S.+(?=,)
+
+  def get_message_size(key, email_info) #The message size (?<=size=)\S.+(?=,)i
+    #puts(email_info)
+    email_info =~ @SIZE_REGEX
+    puts($~.to_s)
+    @size.push($~.to_s())
 
   end
 
@@ -65,21 +82,14 @@ class EmailLogMain
     end
   end
 
-
-  def get_message_number(email_info)
-    email_info =~ /(?<=: )[A-Z0-9]+(?=:)/
-    puts $~.to_s
-  end
-
-
   def get_message_number(email_info)
     email_info =~ /(?<=: )[A-Z0-9]+(?=:)/
     var = $~.to_s
-#puts var
+     #puts var
   end
 
 
-  def makeHash
+ def makeHash
 #emailStore = ''
     msgNumber = ''
     theHash = Hash.new
@@ -101,7 +111,7 @@ class EmailLogMain
       emailStore = ""
 
     else
-      puts "The hash for key #{msgNumber} is #{block}"
+      #puts "The hash for key #{msgNumber} is #{block}"
       theHash.store(msgNumber, block)
 
     end
@@ -113,6 +123,7 @@ end
 e = EmailLogMain.new
 hash = Hash.new
 hash = e.makeHash
+#puts(hash)
 e.extract_data(hash)
 #hash.each{ |key,value| 
 #puts "The HASH VALUE FOR #{key} IS #{value} @@@@@@@@@@@@@@@@@"}
