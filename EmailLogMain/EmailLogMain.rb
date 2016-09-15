@@ -4,20 +4,22 @@ require 'minitest/autorun'
 class EmailLogMain
 
   def initialize(file_name = "mail.log")
-
+   
     @File_name = file_name
     @words = Array.new
     @message_id = Array.new
-    @timestamp = Array.new
-    @from_address = Array.new
-    @to_address = Array.new
-    @size = Hash.new
+    @timestamp = Hash.new
+    @from_address = Hash.new
+    @to_address = Hash.new
+    @size = Array.new
+
     @SIZE_REGEX = /(?<=size=)\S.+(?=,)/
     @TIMESTAMP_REGEX = /^[A-Z][a-z]{2}\W\d+\W([0-9]+):([0-5][0-9]):([0-5][0-9])/
-    @MESSAGE_ID_REGEX = /(?<=: )[A-Z0-9]+(?=:)/
-    @FROM_REGEX = //
-    @TO_REGEX = //
- 
+    @MESSAGE_ID_REGEX = /(?<=message-id=<).+(?=>)/
+    @FROM_REGEX = /(?<=from=<)(.+)@(.+)(?=>)/i
+    @TO_REGEX = /(?<=\sto=<)\S+(?=>)/i
+    @UNIQUE_ID = /(?<=: )[A-Z0-9]+(?=:)/
+
   end
 
 
@@ -32,11 +34,11 @@ class EmailLogMain
   def extract_data(email_info)
     email_info.each do |key, email_data|
 
-      get_message_id(email_info)
-      get_date_and_time(email_data)
-      #get_message_size(email_data)
+      #get_message_id(email_info)
+      get_date_and_time(key, email_data)
+      #get_message_size(key, email_data)
       #get_from_address(email_info)
-      #get_to_address(email_info)
+      get_to_address(key,email_data)
     end
     #write_log()
   end
@@ -44,46 +46,45 @@ class EmailLogMain
 
   def get_message_id(email_info) #The message id (?<=id=<).+(?=>)
     email_info =~ @MESSAGE_ID_REGEX
-    #puts($~.to_s)
+    @message_id.push($~.to_s())
   end
 
 
-  def get_date_and_time(email_info) #The date/time \A.{0,15}
-    #puts(email_info)
-    #email_info.each do |key, email_data|
+  def get_date_and_time(key, email_info) #The date/time \A.{0,15}
     email_info =~ @TIMESTAMP_REGEX
-    #puts($~.to_s)
-    @timestamp.push($~.to_s())  
-    #end
-   #puts(@timestamp.size)
+    puts($~.to_s)
+    found = email_info.scan(@TIMESTAMP_REGEX)
+    #puts(found)
+    @timestamp[key] = $~.to_s
+    @timestamp.each do |k, val|
+      puts("Date: #{val }, Key: #{k}")
+    end
   end
 
 
-  def get_message_size(key, email_info) #The message size (?<=size=)\S.+(?=,)i
-    #puts(email_info)
+  def get_message_size(email_info) #The message size (?<=size=)\S.+(?=,)i
+    
     email_info =~ @SIZE_REGEX
-    puts($~.to_s)
     @size.push($~.to_s())
 
   end
 
 
   def get_from_address(email_info) #The from address
-
-
+    email_info =~ @FROM_REGEX
+    @from.push($~.to_s())
   end
 
 
-  def get_to_address(email_info) #The to address(es)
-#(?<=from=<).+(?=>,) (NOt sure rubular is down)
-    #regex_to = /?<=to=</
-    email_info.each() do |key, email_data|
-      puts(email_data)
-    end
+  def get_to_address(key, email_info) #The to address(es)
+    found = email_info.scan(@TO_REGEX)
+    
+    @to_address[key] = found
   end
+
 
   def get_message_number(email_info)
-    email_info =~ /(?<=: )[A-Z0-9]+(?=:)/
+    email_info =~ @UNIQUE_ID
     var = $~.to_s
      #puts var
   end
