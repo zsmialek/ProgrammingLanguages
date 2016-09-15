@@ -7,11 +7,11 @@ class EmailLogMain
    
     @File_name = file_name
     @words = Array.new
-    @message_id = Array.new
+    @message_id = Hash.new
     @timestamp = Hash.new
     @from_address = Hash.new
     @to_address = Hash.new
-    @size = Array.new
+    @size = Hash.new
 
     @SIZE_REGEX = /(?<=size=)\S.+(?=,)/
     @TIMESTAMP_REGEX = /^[A-Z][a-z]{2}\W\d+\W([0-9]+):([0-5][0-9]):([0-5][0-9])/
@@ -34,9 +34,9 @@ class EmailLogMain
   def extract_data(email_info)
     email_info.each do |key, email_data|
 
-      #get_message_id(email_info)
+      get_message_id(key, email_data)
       get_date_and_time(key, email_data)
-      #get_message_size(key, email_data)
+      get_message_size(key, email_data)
       #get_from_address(email_info)
       get_to_address(key,email_data)
     end
@@ -44,29 +44,22 @@ class EmailLogMain
   end
 
 
-  def get_message_id(email_info) #The message id (?<=id=<).+(?=>)
+  def get_message_id(key, email_info) #The message id (?<=id=<).+(?=>)
     email_info =~ @MESSAGE_ID_REGEX
-    @message_id.push($~.to_s())
+    @message_id[key] = $~.to_s
   end
 
 
   def get_date_and_time(key, email_info) #The date/time \A.{0,15}
     email_info =~ @TIMESTAMP_REGEX
-    puts($~.to_s)
-    found = email_info.scan(@TIMESTAMP_REGEX)
-    #puts(found)
     @timestamp[key] = $~.to_s
-    @timestamp.each do |k, val|
-      puts("Date: #{val }, Key: #{k}")
-    end
   end
 
 
-  def get_message_size(email_info) #The message size (?<=size=)\S.+(?=,)i
-    
+  def get_message_size(key, email_info) #The message size (?<=size=)\S.+(?=,)i
     email_info =~ @SIZE_REGEX
-    @size.push($~.to_s())
-
+    @size[key] = $~.to_s
+    
   end
 
 
