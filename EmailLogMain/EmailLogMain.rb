@@ -23,10 +23,24 @@ class EmailLogMain
   end
 
 
-  def write_log()
-    file_name = "parsed_email.txt"
-    File.open(file_name, "w+") do |f|
-      puts(f)
+  def write_log(email_info)
+    puts("Number of Emails: #{@size.size()}")
+    email_info.each do |key,val|
+
+      puts("MESSAGE ID: #{@message_id[key]}")
+      puts("TIMESTAMP: #{@timestamp[key]}")
+      puts("MESSGAGE SIZE: #{@size[key]}")
+      puts("TO ADDRESS: #{@to_address[key]}")
+      #if @to_address[key].size > 1
+        #@to_addrress[key].each do |address|
+	  #puts(address)
+	#end
+      #else
+         #puts(@to_address[key])
+      #end
+
+      puts("FROM ADDRESS #{@from_address[key]}")
+      puts("**********************************************NEW MESSAGE************************************")
     end
   end
 
@@ -37,10 +51,10 @@ class EmailLogMain
       get_message_id(key, email_data)
       get_date_and_time(key, email_data)
       get_message_size(key, email_data)
-      #get_from_address(email_info)
+      get_from_address(key, email_data)
       get_to_address(key,email_data)
     end
-    #write_log()
+    write_log(email_info)
   end
 
 
@@ -63,9 +77,15 @@ class EmailLogMain
   end
 
 
-  def get_from_address(email_info) #The from address
+  def get_from_address(key, email_info) #The from address
     email_info =~ @FROM_REGEX
-    @from.push($~.to_s())
+    #if $~.to_s != nil
+    @from_address[key] = $~.to_s
+    #end
+
+    #@from_address.each do |k, val|
+      #puts("Key #{k} Val: #{val}")
+    #end
   end
 
 
@@ -98,7 +118,7 @@ class EmailLogMain
     if theHash.key?(msgNumber)
       emailStore = theHash[msgNumber]
 	#puts "BEFORE #{emailStore}"
-      emailStore = emailStore.to_s + " " + block.to_s
+      emailStore = emailStore.to_s + block.to_s
 	#puts "AFTER #{emailStore}"
       theHash.delete(msgNumber) 
       theHash.store(msgNumber, emailStore)
@@ -111,6 +131,30 @@ class EmailLogMain
     end
   }
   return theHash
+  end
+
+
+   def RegexExist(str, var)
+     case str
+     when "messageid"
+       return @MESSAGE_ID_REGEX.match(var)[0].to_s
+     when "to"
+       return @TO_REGEX.match(var)[0].to_s
+     when "from"
+       return @FROM_REGEX.match(var)[0].to_s
+     when "size"
+       return @SIZE_REGEX.match(var)[0].to_s
+     when "uniqueid"
+       return @UNIQUE_ID.match(var)[0].to_s
+     when "time"
+       return @TIMESTAMP_REGEX.match(var)[0].to_s
+     end
+   end
+
+
+  #This will get the file that we are testing
+  def getFileName
+    return @File_name
   end
 end
 
