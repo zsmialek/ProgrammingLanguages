@@ -34,6 +34,11 @@ class ConverterTest < MiniTest::Test
 		assert_equal(6, emailString.scan(@@TIMESTAMP_REGEX).size)  #Time
 		assert_equal(1, emailString.scan(@@FROM_REGEX).size)       #from email
 		assert_equal(6, emailString.scan(@@UNIQUE_ID).size)        #uniqueID
+
+		#This test will check for the correct ammount of emails since every email has a unique message ID 
+		#Messageid == total number of email i.e. the size of our hash		
+		holdEntireString = IO.read(email.getFileName)
+		assert_equal(emailHash.length, holdEntireString.scan(@@MESSAGE_ID_REGEX).size)
 	end
 	
 	

@@ -1,6 +1,15 @@
 #!/usr/bin/ruby
 require 'minitest/autorun'
 
+=begin
+  Zach Smialek
+  Nicholas Corl
+
+  This script takes in an email log for the server and parses out the data in a human readable format.  Please look at the assumptions made the exact nature on how the server logs
+  email transactions are unknown to us
+=end
+
+
 class EmailLogMain
 
   def initialize(file_name = "mail.log")
@@ -24,7 +33,7 @@ class EmailLogMain
 
 
   def write_log(email_info)
-    puts("Number of Emails: #{@size.size()}")
+    puts("NUMBER OF EMAILS: #{@size.size()}")
     email_info.each do |key,val|
 
       puts("MESSAGE ID: #{@message_id[key]}")
@@ -43,6 +52,18 @@ class EmailLogMain
       puts("**********************************************NEW MESSAGE************************************")
     end
   end
+
+=begin
+  Methods using regex to extract data for the log file.  In most cases just extracts the first match, the to will grab all the to that were include in the email thread.
+
+  ASSUMPTIONS:
+    There was only one from email
+    Time Stamp was repeat for the stmp and qmgr.  This only needed to be reported once.
+    Message Size was that the size include all the emails for the thread, IE replies, forwards...and so on
+    There was only one message id.
+    Therefore this assumptions yeilded the regex results to be unique and only one occurance with the log.
+
+=end
 
 
   def extract_data(email_info)
@@ -103,8 +124,14 @@ class EmailLogMain
   end
 
 
+=begin
+  Master Hashmap, this hashmap contains all the unique ID's in the log file.  This used to extract the info from the and refer back when it
+  needs to be printed.  Reads in file, uses @UNIQUE_ID and is used to build the other hash maps.  This is the main refer point so the email
+  data does not get mixed up with another email thread.
+=end
+
+
  def makeHash
-#emailStore = ''
     msgNumber = ''
     theHash = Hash.new
 
@@ -117,15 +144,12 @@ class EmailLogMain
 
     if theHash.key?(msgNumber)
       emailStore = theHash[msgNumber]
-	#puts "BEFORE #{emailStore}"
       emailStore = emailStore.to_s + block.to_s
-	#puts "AFTER #{emailStore}"
       theHash.delete(msgNumber) 
       theHash.store(msgNumber, emailStore)
       emailStore = ""
 
     else
-      #puts "The hash for key #{msgNumber} is #{block}"
       theHash.store(msgNumber, block)
 
     end
