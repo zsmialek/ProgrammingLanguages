@@ -30,6 +30,10 @@ class Player
 
   end
 
+  def select_player()
+    select_player_message = "Select computer player (1-2)
+  end
+
 end
 
 game = Game.new()
