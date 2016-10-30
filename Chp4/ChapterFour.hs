@@ -23,3 +23,23 @@ makeReverseRange srt end
   | srt > end = []
 makeReverseRange 0 0 = [0]
 makeReverseRange srt end = [end] ++ makeReverseRange srt (end - 1)
+
+notInList :: (Num a, Eq a) => a -> [a] -> Bool
+notInList y (x:xs)
+  | x == y = False
+  | otherwise = notInList y xs
+notInList x [] = True
+
+square :: (Num a) => a -> a
+square x = x * x
+
+squareAll :: (Num a) => [a] -> [a]
+squareAll [] = []
+squareAll (x:xs) = [square x] ++ squareAll xs
+
+squareOnlyEven :: (Num a, Eq a, Integral a) => [a] -> [a]
+squareOnlyEven (x:xs)
+  | x `mod` 2 == 0 = [square x] ++ squareOnlyEven xs
+  | otherwise = [x] ++ squareOnlyEven xs
+squareOnlyEven [] = []
+
