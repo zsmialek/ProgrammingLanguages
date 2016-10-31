@@ -1,3 +1,9 @@
+-- Zach Smialek
+-- 10.30.2016
+-- Chapter Four
+
+module ChapterFour where
+
 minimum' :: (Num a, Ord a) => [a] -> a
 minimum' [x] = x
 minimum' (a:b:xs) 
@@ -37,9 +43,45 @@ squareAll :: (Num a) => [a] -> [a]
 squareAll [] = []
 squareAll (x:xs) = [square x] ++ squareAll xs
 
+squareIfEven :: (Num a, Eq a, Integral a) => [a] -> [a]
+squareIfEven (x:xs)
+  | x `mod` 2 == 0 = [square x] ++ squareIfEven xs
+  | otherwise = [x] ++ squareIfEven xs
+squareIfEven [] = []
+
 squareOnlyEven :: (Num a, Eq a, Integral a) => [a] -> [a]
 squareOnlyEven (x:xs)
   | x `mod` 2 == 0 = [square x] ++ squareOnlyEven xs
-  | otherwise = [x] ++ squareOnlyEven xs
+  | otherwise = squareOnlyEven xs
 squareOnlyEven [] = []
 
+merge :: (Ord a) => [a] -> [a] -> [a]
+merge xs [] = xs
+merge [] ys = ys
+merge (x:xs) (y:ys)
+  | x < y = x:merge xs (y:ys)
+  | otherwise = y:merge (x:xs) ys
+
+mergeSort :: (Ord a) => [a] -> [a] -> [a]
+mergeSort [] [] = []
+mergeSort x [] = x
+mergeSort [] y = y
+mergeSort x y = mergesort (x ++ y)
+
+splitInHalf :: [a] -> ([a], [a])
+splitInHalf xs = (take n xs, drop n xs)
+  where n = (length xs) `div` 2
+
+mergesort :: (Ord a) => [a] -> [a]
+mergesort xs
+  | (length xs) > 1 = merge (mergesort ls) (mergesort rs)
+  | otherwise = xs
+  where (ls, rs) = splitInHalf xs
+
+subList :: Int -> Int -> [Int] -> [Int]
+subList x y xs
+  | y <= 0 = []
+  | x > length xs = []
+  | x == length xs = []
+subList x y [] = []
+subList x y xs = [xs!!x] ++ subList (x+1) (y-1) xs
