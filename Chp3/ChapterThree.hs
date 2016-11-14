@@ -72,15 +72,15 @@ orderThree list
       lastNum = last list
       sorted = orderTwo firstTwo
 
-{- Pattern matching is generally perfered, it is cleaner and easier to read.  
+--Pattern matching is generally perfered, it is cleaner and easier to read.  
  
- If you need to check evaluate a certain property using a guard is the better way to go.  
+ --If you need to check evaluate a certain property using a guard is the better way to go.  
 
-Also use if there are many condictions guards are the more readable way of writing the code.
+-- Also use if there are many condictions guards are the more readable way of writing the code.
 
-If there is a need to deconstruct the data pattern matching is the only way of doing that and they also create a bind to the indentifiers.
+-- If there is a need to deconstruct the data pattern matching is the only way of doing that and they also create a bind to the indentifiers.
 
-In the end guards are almost icing on the cake since the are no more the just a cleaner syntax way of writing if then statments that makes the code cleaner.
+-- In the end guards are almost icing on the cake since the are no more the just a cleaner syntax way of writing if then statments that makes the code cleaner.
 
-If you can do it with pattern matching do it but it gets super messy then it is time to try something different. 
--}
+-- If you can do it with pattern matching do it but it gets super messy then it is time to try something different. 
+

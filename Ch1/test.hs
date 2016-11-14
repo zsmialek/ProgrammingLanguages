@@ -1,5 +1,4 @@
----------------------------------------------------------
---negsInList set = length [ x | x <- set, x < 0 ]
+
 --sumOdds set = sum [ x | x <-set, x `mod` 2 /= 0 ]
 --getQuantities receipt = head[ first | first <- receipt]
 --doubleAll set =  [[2*val | subset<-set] | val <-subset]
@@ -16,11 +15,17 @@ squareEvenNumbers set = [ square x | x <- set, x `mod` 2 == 0 ]
 courseMajor :: String -> String
 courseMajor cls@(x:xs:xxs) = cls ++ " is a " ++ [x] ++ [xs] ++ " course"
 
-threshold :: (Num a) => a -> a -> a -> String
-threshold p qty thrs 
-  | total < thrs = "Total is low"
-  | total 
-  where total = p * qty
+threshold :: (Num a, Ord a) => a -> a -> a -> String
+threshold p qty thrs
+
+    | total < thrs = "Total is low"
+    | thrs == 5 && thrs + 1 <= total && total <= thrs+4 = "Total is medium"
+    | total >= thrs && total <= thrs + 9 = "Total is medium"
+    | total >= thrs + 10 && total <= thrs + 19 = "Total is high"
+    | otherwise = "Total is extraordinary"
+
+    where total = p * qty
+
 lactate :: Double -> Double -> String
 lactate heart_rate max_hr
       | ratio >= easy && ratio < aerobic = "easy"
@@ -53,5 +58,14 @@ orderTwo list
     | head list <= last list = [ head list, last list ]
     | otherwise = [last list, head list ]
 
---orderThree :: (Num a, Eq a Ord a) => [a] -> [a]
---orderThree list
+orderThree :: (Num a, Eq a, Ord a) => [a] -> [a]
+orderThree list
+
+    | head sorted < lastNum && last sorted > lastNum = [head sorted, lastNum, last sorted]
+    | head sorted < lastNum && last sorted < lastNum = [head sorted,last sorted, lastNum]
+    | head sorted > lastNum && last sorted > lastNum = [lastNum, head sorted, last sorted]
+
+    where 
+      firstTwo = take 2 list
+      lastNum = last list
+      sorted = orderTwo firstTwo

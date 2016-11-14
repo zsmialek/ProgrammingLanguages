@@ -1,0 +1,11 @@
+product 'book'
+packing_slip 'shipping'
+packing_slip 'royalty'
+
+product 'membership'
+activate
+email 'member_email'
+
+product 'book'
+pay 'commission'
+

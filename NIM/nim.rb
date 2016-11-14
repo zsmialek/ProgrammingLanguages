@@ -20,7 +20,7 @@ class Game
 
   
   def draw_board(user_selection)
-    
+     
   end
 end
 
@@ -31,10 +31,11 @@ class Player
   end
 
   def select_player()
-    select_player_message = "Select computer player (1-2)
+    select_player_message = "Select computer player (1-2)"
+    
   end
 
 end
 
 game = Game.new()
-
+auto_play = Player.new()
